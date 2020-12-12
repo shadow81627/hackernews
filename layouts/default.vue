@@ -1,7 +1,6 @@
 <template>
   <v-app>
     <v-app-bar fixed app height="64">
-      <!-- <v-toolbar-title v-text="title" /> -->
       <v-spacer></v-spacer>
       <search></search>
       <v-spacer></v-spacer>
@@ -14,7 +13,7 @@
       /></v-btn>
     </v-app-bar>
     <v-main role="main">
-      <nuxt style="min-height: 100vh" keep-alive />
+      <nuxt style="min-height: 100vh" />
       <the-footer></the-footer>
     </v-main>
   </v-app>
@@ -26,7 +25,6 @@ export default {
   data() {
     return {
       faGithub,
-      title: 'Daim Hacker News',
     }
   },
 }

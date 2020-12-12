@@ -12,7 +12,9 @@
         <v-list-item-title class="text-wrap">
           {{ item.title }}
           <template v-if="isAbsolute(item.url)">
-            <small class="grey--text">({{ item.url }})</small>
+            <small class="grey--text" style="word-break: break-all"
+              >({{ item.url }})</small
+            >
           </template>
           &ZeroWidthSpace;</v-list-item-title
         >

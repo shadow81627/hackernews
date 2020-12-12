@@ -44,12 +44,28 @@ export default {
     titleTemplate: '%s - Hacker News',
     title: 'Hacker News',
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      {
+        once: true,
+        name: 'charset',
+        hid: 'charset',
+        content: 'utf-8',
+      },
+      {
+        once: true,
+        hid: 'viewport',
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1',
+      },
       {
         hid: 'description',
         name: 'description',
         content: 'Hacker News clone built with Nuxt.js.',
+      },
+      {
+        once: true,
+        name: 'version',
+        hid: 'version',
+        content: pkg.version,
       },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],

@@ -5,10 +5,8 @@
       :items-per-page.sync="limit"
       item-key="title"
       hide-default-footer
-      :loading="true"
-      :xloading="$fetchState.pending"
+      :loading="$fetchState.pending"
       :server-items-length="total"
-      transition="slide-x-transition"
     >
       <template #loading>
         <v-row>
