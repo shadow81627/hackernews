@@ -1,93 +1,150 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <div class="text-center">
-        <logo />
-        <vuetify-logo />
-      </div>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>
-            Vuetify is a progressive Material Design component framework for
-            Vue.js. It was designed to empower developers to create amazing
-            applications.
-          </p>
-          <p>
-            For more information on Vuetify, check out the
-            <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation </a
-            >.
-          </p>
-          <p>
-            If you have questions, please join the official
-            <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord </a
-            >.
-          </p>
-          <p>
-            Find a bug? Report it on the github
-            <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board </a
-            >.
-          </p>
-          <p>
-            Thank you for developing with Vuetify and I look forward to bringing
-            more exciting features in the future.
-          </p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3" />
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
+  <v-container>
+    <v-data-iterator
+      :items="items"
+      :items-per-page.sync="limit"
+      item-key="title"
+      hide-default-footer
+      :loading="true"
+      :xloading="$fetchState.pending"
+      :server-items-length="total"
+      transition="slide-x-transition"
+    >
+      <template #loading>
+        <v-row>
+          <v-col
+            v-for="i in new Array(limit)"
+            :key="i"
+            class="d-flex flex-column"
+            cols="12"
           >
-            Nuxt Documentation
-          </a>
-          <br />
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
+            <v-skeleton-loader>
+              <div class="v-skeleton-loader__bone">
+                <item
+                  class="flex d-flex flex-column justify-between"
+                  :item="{ loading: true }"
+                ></item>
+              </div>
+            </v-skeleton-loader>
+          </v-col>
+        </v-row>
+      </template>
+      <template v-slot:default="props">
+        <v-row>
+          <v-col
+            v-for="item in props.items"
+            :key="item.title"
+            class="d-flex flex-column"
+            cols="12"
           >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn color="primary" nuxt to="/inspire"> Continue </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+            <v-fade-transition appear>
+              <item
+                class="flex d-flex flex-column justify-between"
+                :item="item"
+              ></item>
+            </v-fade-transition>
+          </v-col>
+        </v-row>
+      </template>
+      <template #footer>
+        <v-row class="mt-2" align="center" justify="center">
+          <v-col>
+            <v-pagination v-model="page" :length="pages" total-visible="9" />
+            <div v-show="false">Total: {{ total }}</div>
+          </v-col>
+        </v-row>
+      </template>
+    </v-data-iterator>
+  </v-container>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import VuetifyLogo from '~/components/VuetifyLogo.vue'
-
 export default {
-  components: {
-    Logo,
-    VuetifyLogo,
+  async fetch() {
+    const result = await this.$axios.$get(
+      'https://hn.algolia.com/api/v1/search',
+      {
+        params: {
+          hitsPerPage: this.limit,
+          query: this.search || undefined,
+          page: this.page,
+          tags: 'story',
+        },
+      }
+    )
+    this.items = result.hits
+    this.total = result.nbHits
+    this.pages = result.nbPages
+    this.page = result.page
+  },
+  fetchOnServer: false,
+  data: () => ({
+    items: [],
+    defaultLimit: 12,
+    total: null,
+    pages: 1,
+  }),
+  computed: {
+    page: {
+      get() {
+        const page = parseInt(this.$route.query.page, 10) || 1
+        // set page to last page if page is larger than last page
+        return page <= this.pages ? page : this.pages
+      },
+      set(value) {
+        const page = value <= this.pages ? value : this.pages
+        if (page !== this.page) {
+          this.$router.push({
+            query: this.generateQuery({
+              page,
+            }),
+          })
+        }
+      },
+    },
+    search: {
+      get() {
+        return this.$route.query.search || ''
+      },
+      set(search) {
+        this.$router.push({
+          query: { search: search && search !== '' ? search : undefined },
+        })
+      },
+    },
+    limit: {
+      get() {
+        const limit = this.defaultLimit === -1 ? this.total : this.defaultLimit
+        return parseInt(this.$route.query.limit, 10) || limit
+      },
+      set(limit) {
+        this.$router.push({ query: this.generateQuery({ limit }) })
+      },
+    },
+  },
+  watch: {
+    '$route.query'() {
+      this.$fetch()
+    },
+  },
+  methods: {
+    generateQuery({
+      page = this.reset ? 1 : this.page,
+      limit = this.limit,
+      search = this.search,
+    }) {
+      // sorted query string for more cache hits
+      return Object.fromEntries(
+        Object.entries({
+          search: search && search !== '' ? search : undefined,
+          page: page !== 1 ? page : undefined,
+          limit:
+            limit !== this.defaultLimit && limit !== this.total
+              ? limit
+              : undefined,
+        }).sort()
+      )
+    },
   },
 }
 </script>
