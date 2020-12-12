@@ -1,6 +1,18 @@
 {
   "name": "hackernews",
+  "description": "Hacker News clone built with Nuxt.js.",
   "version": "1.0.0",
+  "author": {
+    "name": "Damien Robinson",
+    "email": "damien.robinson@daim.dev",
+    "url": "https://daim.dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shadow81627/hackernews.git"
+  },
+  "bugs": "https://github.com/shadow81627/hackernews/issues",
+  "homepage": "https://hackernews.daim.dev/",
   "private": true,
   "scripts": {
     "dev": "nuxt-ts",
