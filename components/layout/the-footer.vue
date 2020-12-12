@@ -7,7 +7,7 @@
             <v-card-text>
               <span>{{ $config.VERSION }}</span>
               <span v-if="$config.COMMIT">{{ shortHash($config.COMMIT) }}</span>
-              <span v-if="$config.VERSION && $config.COMMIT">|</span>
+              <span v-if="$config.VERSION && $config.COMMIT"></span>
             </v-card-text>
           </v-card>
         </v-col>
