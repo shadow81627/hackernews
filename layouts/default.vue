@@ -5,7 +5,11 @@
       <v-spacer></v-spacer>
       <search></search>
       <v-spacer></v-spacer>
-      <v-btn href="https://github.com/shadow81627/hackernews" icon>
+      <v-btn
+        href="https://github.com/shadow81627/hackernews"
+        icon
+        title="Github"
+      >
         <font-awesome-icon :icon="faGithub" size="2x" fixed-width
       /></v-btn>
     </v-app-bar>

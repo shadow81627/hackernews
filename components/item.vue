@@ -22,6 +22,7 @@
             <a
               :href="`https://news.ycombinator.com/user?id=${item.author}`"
               target="_blank"
+              rel="noopener"
               >{{ item.author }}</a
             >
           </span>
@@ -32,6 +33,7 @@
             |
             <a
               target="_blank"
+              rel="noopener"
               :href="`https://news.ycombinator.com/item?id=${item.objectId}`"
             >
               {{ item.num_comments }} comments</a
