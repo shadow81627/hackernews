@@ -41,3 +41,9 @@ jobs:
 
       - name: Run linter 👀
         run: npm run lint
+
+      - name: Run Build
+        run: npm run generate
+
+      - name: Run Build
+        run: npm run lhci:autorun
