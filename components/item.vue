@@ -4,12 +4,12 @@
     target="_blank"
     rel="noopener"
   >
-    <v-list-item two-line>
-      <v-list-item-avatar tile size="64">
+    <v-list-item three-line>
+      <v-list-item-avatar tile size="64" class="ma-auto">
         {{ item.points }}
       </v-list-item-avatar>
       <v-list-item-content>
-        <v-list-item-title>
+        <v-list-item-title class="text-wrap">
           {{ item.title }}
           <template v-if="isAbsolute(item.url)">
             <small class="grey--text">({{ item.url }})</small>
@@ -37,7 +37,6 @@
               {{ item.num_comments }} comments</a
             >
           </template>
-
           &ZeroWidthSpace;
         </v-list-item-subtitle>
       </v-list-item-content>
