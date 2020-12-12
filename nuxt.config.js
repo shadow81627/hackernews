@@ -1,5 +1,44 @@
+import pkg from './package'
+
+const BASE_URL = (
+  process.env.BASE_URL ||
+  process.env.DEPLOY_URL ||
+  process.env.URL ||
+  process.env.VERCEL_URL ||
+  `http${process.env.PORT === 433 ? 's' : ''}://${process.env.HOST}:${
+    process.env.PORT
+  }`
+).replace(
+  /(^http[s]?)?(?::\/\/)?(.*)/,
+  function (_, protocol = 'http', domain) {
+    return `${protocol}://${domain}`
+  }
+)
+
+const env = {
+  HOST: process.env.HOST,
+  PORT: process.env.PORT,
+  BASE_URL,
+  VERSION: pkg.version,
+  COMMIT:
+    process.env.npm_package_gitHead ||
+    process.env.TRAVIS_COMMIT ||
+    process.env.VERCEL_GITHUB_COMMIT_SHA,
+  DATE_GENERATED: new Date().toISOString(),
+  APP_NAME:
+    process.env.APP_NAME ||
+    `${pkg.name.charAt(0).toUpperCase()}${pkg.name.slice(1)}`,
+}
+
 export default {
   target: 'static',
+
+  publicRuntimeConfig: {
+    ...env,
+    googleAnalytics: {
+      id: process.env.GOOGLE_ANALYTICS_ID || 'UA-176793964-1',
+    },
+  },
 
   head: {
     titleTemplate: '%s - Hacker News',
@@ -35,6 +74,12 @@ export default {
     '@nuxt/content',
     'nuxt-fontawesome',
   ],
+
+  pwa: {
+    meta: {
+      ogHost: env.BASE_URL,
+    },
+  },
 
   axios: {},
 
