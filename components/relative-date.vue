@@ -2,7 +2,7 @@
   <client-only>
     <v-tooltip top>
       <time :datetime="_date.toISOString()">{{ _date.format(format) }}</time>
-      <template v-slot:activator="{ on, attrs }">
+      <template #activator="{ on, attrs }">
         <span v-bind="attrs" v-on="on">{{ relativeDate }}</span>
       </template>
     </v-tooltip>

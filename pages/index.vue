@@ -27,7 +27,7 @@
           </v-col>
         </v-row>
       </template>
-      <template v-slot:default="props">
+      <template #default="props">
         <v-row>
           <v-col
             v-for="item in props.items"
@@ -58,6 +58,12 @@
 
 <script>
 export default {
+  data: () => ({
+    items: [],
+    defaultLimit: 12,
+    total: null,
+    pages: 1,
+  }),
   async fetch() {
     const result = await this.$axios.$get(
       'https://hn.algolia.com/api/v1/search',
@@ -76,12 +82,6 @@ export default {
     this.page = result.page
   },
   fetchOnServer: false,
-  data: () => ({
-    items: [],
-    defaultLimit: 12,
-    total: null,
-    pages: 1,
-  }),
   computed: {
     page: {
       get() {

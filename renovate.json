@@ -2,7 +2,7 @@
   "prConcurrentLimit": 2,
   "dependencyDashboard": true,
   "rollbackPrs": true,
-  "automerge": true,
+  "automerge": false,
   "bumpVersion": null,
   "labels": ["dependencies"],
   "lockFileMaintenance": { "enabled": true },

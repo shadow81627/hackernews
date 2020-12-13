@@ -41,8 +41,8 @@ export default {
   },
 
   head: {
-    titleTemplate: '%s - Hacker News',
-    title: 'Hacker News',
+    titleTemplate: '%s | Daim',
+    title: 'Hacker News Search',
     meta: [
       {
         once: true,
