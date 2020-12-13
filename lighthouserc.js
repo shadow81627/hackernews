@@ -11,7 +11,6 @@ module.exports = {
         'non-composited-animations': 'warn',
         'unused-css-rules': 'warn',
         'unused-javascript': 'warn',
-        'valid-source-maps': 'warn',
         'uses-rel-preconnect': 'warn',
       },
     },
